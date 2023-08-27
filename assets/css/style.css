@@ -1,3 +1,8 @@
+*{
+    /* direction: rtl; */
+    font-family: tahoma;
+}
+
 @media(min-width:600px){
     .top-navbar{
         box-shadow: 0 0 50px gray !important;
@@ -52,4 +57,11 @@ table.highlight > tbody > tr:hover {
 .add_user_modal.show{
     box-shadow: 0 0 10px #7c4dff;
     bottom: 0;
+}
+.sidenav_link_icon{
+    margin: 0 0 0 25px !important;
+}
+.user_list_section{
+    height: calc(101vh - 258px);
+    overflow: auto;
 }

@@ -5,24 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="/assets/materialize-v1.0.0/materialize/css/materialize.min.css">
+    <link rel="stylesheet" href="/assets/materialize-v1.0.0/materialize/css/materialize_rtl.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="/assets/css/util.css">
+    <link rel="Icon" type="image/x-icon" href="/img/—Pngtree—laptop _5184713.png">
 </head>
             
-<body>
+<body x-data="usersData">
     
     <!-- navbar sevtion ----start------>
     <nav class="white z-depth-0 top-navbar">
         <div class="nav-wrapper">
-            <a href="users.html" class="hide-on-med-and-up deep-purple-text text-accent-2">User management</a>
-            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons deep-purple-text text-accent-2">menu</i></a>
+            <a href="users.html" class="hide-on-med-and-up deep-purple-text text-accent-2">مدیریت کاربر</a>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger deep-purple-text text-accent-2 right"><i class="material-icons">menu</i></a>
         
-        <ul class="hide-on-med-and-down">
-            <li><a href="/" class="deep-purple-text text-accent-2">Home</a></li>
-            <li><a href="users.html" class="deep-purple-text text-accent-2">User Management</a></li>
-            <li><a href="https://t.me/Amirprx3" class="deep-purple-text text-accent-2">Telegram</a></li>
-            <li><a href="https://www.youtube.com/@amirprx3" class="deep-purple-text text-accent-2">AQ Amirprx3</a></li>
+        <ul class="hide-on-med-and-down dis-flex">
+            <li><a href="/" class="deep-purple-text text-accent-2">خانه</a></li>
+            <li><a href="users.html" class="deep-purple-text text-accent-2">مدیریت کاربران</a></li>
+            <li><a href="https://t.me/Amirprx3" class="deep-purple-text text-accent-2">تلگرام</a></li>
+            <li><a href="https://www.youtube.com/@amirprx3" class="deep-purple-text text-accent-2">یوتیوب Amirprx3</a></li>
         </ul>
         </div>
     </nav>
@@ -39,12 +41,12 @@
             </div>
         </li>
 
-        <li><a href="https://t.me/Amirprx3"><i class="material-icons">insert_link</i>Instagram</a></li>
-        <li><a href="#"><i class="material-icons">insert_link</i>Telegram</a></li>
+        <li><a href="https://t.me/Amirprx3"><i class="material-icons right sidenav_link_icon">insert_link</i>اینستاگرام</a></li>
+        <li><a href="#"><i class="material-icons right sidenav_link_icon">insert_link</i>تلگرام</a></li>
         <li><div class="divider"></div></li>
-        <li><a class="subheader">pages:</a></li>
-        <li><a class="waves-effect" href="/">Home</a></li>
-        <li><a class="waves-effect" href="/users.html">Users</a></li>
+        <li><a class="subheader">صفحات :</a></li>
+        <li><a class="waves-effect" href="/">خانه</a></li>
+        <li><a class="waves-effect" href="/users.html">کاربران</a></li>
     </ul>
     <!------ navbar sevtion -----end------>
 
@@ -62,7 +64,7 @@
                     
                     <i class="material-icons m-r-1">add</i>
 
-                    Add User
+                    اضافه کردن کاربر
                 
                 </button>
 
@@ -70,13 +72,13 @@
             
             <!---- serch sections ----->
             
-            <div class="raw col s12 m9 l8">
+            <div class="raw col s12 m9 l8 m-b-5">
                 <div class="input-field col s12">
                     
                         <input id="search" type="text" class="validate">
                         <label for="search">
                         <i class="material-icons pos-relative top-7">search</i>
-                        Search
+                        جست و جو
                     </label>
                 </div>
             </div>
@@ -85,153 +87,129 @@
     
         </section>
 
-        <section class="user_list_section">
+        <template  x-if="isloading">
+            <div class="center-align">
+                <div class="preloader-wrapper small active">
+                    <div class="spinner-layer spinner-blue">
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div><div class="gap-patch">
+                        <div class="waves-circle left">
+                            <div class="circle"></div>
+                    </div>
+                    </div>
+                    </div>
+
+                    <div class="spinner-layer spinner-red">
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div><div class="gap-patch">
+                        <div class="waves-circle left">
+                            <div class="circle"></div>
+                    </div>
+                    </div>
+                    </div>
+
+                    <div class="spinner-layer spinner-yellow">
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div><div class="gap-patch">
+                    <div class="waves-circle left">
+                            <div class="circle"></div>
+                    </div>
+                    </div>
+                    </div>
+
+                    <div class="spinner-layer spinner-green">
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div><div class="gap-patch">
+                        <div class="waves-circle left">
+                            <div class="circle"></div>
+                    </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            </template>
+
+
+        <section class="user_list_section" x-init="getUsers()">
             <ul class="collapsible popout hide-on-med-and-up">
+                <template x-for="user in users">
                 <li  class="users_list_item">
                     <div class="collapsible-header">
                         <i class="material-icons deep-purple-text text-accent-2 users_list_arrow_icon trans-0-2">arrow_drop_down_circle</i>
-                        Amirhossein bh
+                        <span x-text="user.name"></span>
                     </div>
                     <div class="collapsible-body">
                         <div class="p-all-5">
-                            <span class="f-bold">Username :</span>
-                            <span>Amirhossein Bh</span>
+                            <span class="f-bold">نام کاربری :</span>
+                            <span x-text="user.username"></span>
                         </div>
                             <div class="p-all-5">
-                            <span class="f-bold">Email :</span>
-                            <span>Amir@gmail.com</span>
+                            <span class="f-bold">ایمیل :</span>
+                            <span x-text="user.email"></span>
                         </div>
                             <div class="p-all-5">
-                            <span class="f-bold">Address :</span>
-                            <span>Tehran - emam street...</span>
+                            <span class="f-bold">آدرس :</span>
+                            <span x-text="user.address.city+'-'+user.address.street">تهران - خیابان امام</span>
                         </div>
                             <div class="p-all-5 flex-l-m">
-                            <span class="f-bold">Action :</span>
+                            <span class="f-bold">اقدامات :</span>
                             <i class="material-icons orange-text m-l-5 m-r-5">edit</i>
-                            <i class="material-icons red-text m-l-5 m-r-5">delete_forever</i>
-                        </div>
-                    </div> 
+                            <i class="material-icons red-text m-l-5 m-r-5">delete_forever</i> 
                 </li>
-                <li class="users_list_item">
-                    <div class="collapsible-header">
-                        <i class="material-icons deep-purple-text text-accent-2 users_list_arrow_icon trans-0-2">arrow_drop_down_circle</i>
-                        Mahmood bh
-                    </div>
-                    <div class="collapsible-body">
-                        <div class="p-all-5">
-                            <span class="f-bold">Username :</span>
-                            <span>Mahmood Bh</span>
-                        </div>
-                            <div class="p-all-5">
-                            <span class="f-bold">Email :</span>
-                            <span>Mahmood225@gmail.com</span>
-                        </div>
-                            <div class="p-all-5">
-                            <span class="f-bold">Address :</span>
-                            <span>Isfahan - j street ...</span>
-                        </div>
-                            <div class="p-all-5 flex-l-m">
-                            <span class="f-bold">Action :</span>
-                            <i class="material-icons orange-text m-l-5 m-r-5">edit</i>
-                            <i class="material-icons red-text m-l-5 m-r-5">delete_forever</i>
-
-                        </div>
-                <li class="users_list_item">
-                    <div class="collapsible-header">
-                        <i class="material-icons deep-purple-text text-accent-2 users_list_arrow_icon trans-0-2">arrow_drop_down_circle</i>
-                        Abolfazl mk
-                    </div>
-                    <div class="collapsible-body">
-                        <div class="p-all-5">
-                            <span class="f-bold">Username :</span>
-                            <span>Abolfazl Mk</span>
-                        </div>
-                            <div class="p-all-5">
-                            <span class="f-bold">Email :</span>
-                            <span>Abol1254@gmail.com</span>
-                        </div>
-                            <div class="p-all-5">
-                            <span class="f-bold">Address :</span>
-                            <span>Shiraz - flowers street ...</span>
-                        </div>
-                            <div class="p-all-5 flex-l-m">
-                            <span class="f-bold">Action :</span>
-                            <i class="material-icons orange-text m-l-5 m-r-5">edit</i>
-                            <i class="material-icons red-text m-l-5 m-r-5">delete_forever</i>
-
-                        </div>
-                    </div> 
-                </li>
+                </template>
             </ul>
             
             <div class="hide-on-med-and-down show-on-medium-and-up container">
-                <table class="striped centered highlight ">
+                <table class="striped centered highlight">
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Name</th>
-                            <th>Username</th>
-                            <th>Email</th>
-                            <th>Address</th>
-                            <th>Action</th>
+                            <th>نام</th>
+                            <th>نام کاربری</th>
+                            <th>ایمیل</th>
+                            <th>آدرس</th>
+                            <th>اقدامات</th>
                         </tr>
                     </thead>
 
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Amirhossein bh</td>
-                            <td>Amirhossein Bh</td>
-                            <td>Amir@gmail.com</td>
-                            <td>Tehran - emam street ...</td>
-                            <td>
-                                <i class="material-icons orange-text m-l-5 m-r-5">edit</i>
-                                <i class="material-icons red-text m-l-5 m-r-5">delete_forever</i>
+                    <tbody class="desktop_table_body">
+                        <template x-for="user in users">
 
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Mahmood bh</td>
-                            <td>Mahmood Bh</td>
-                            <td>Mahmood225@gmail.com</td>
-                            <td>Isfahan - j street ...</td>
-                            <td>
-                                <i class="material-icons orange-text m-l-5 m-r-5">edit</i>
-                                <i class="material-icons red-text m-l-5 m-r-5">delete_forever</i>
-
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Abolfazl mk</td>
-                            <td>Abolfazl Mk</td>
-                            <td>Abol1254@gmail.com</td>
-                            <td>Shiraz - flowers street ...</td>
-                            <td>
-                                <i class="material-icons orange-text m-l-5 m-r-5">edit</i>
-                                <i class="material-icons red-text m-l-5 m-r-5">delete_forever</i>
-
-                            </td>
-                        </tr>
+                                <tr>
+                                    <td x-text="user.id"></td>
+                                    <td x-text="user.name"></td>
+                                    <td x-text="user.username"></td>
+                                    <td x-text="user.email"></td>
+                                    <td x-text="user.address.city+'-'+user.address.street"></td>
+                                    <td>
+                                        <i class="material-icons orange-text m-l-5 m-r-5 hov-pointer">edit</i>
+                                        <i class="material-icons red-text m-l-5 m-r-5 hov-pointer">delete_forever</i>
+        
+                                    </td>
+                                </tr>
+                        </template>
+                        
                     </tbody>
                 </table>
             </div>
 
-            <div class="pagination_container container p-l-9 p-r-9 p-t-15 p-b-15 flex-sb-m pos-fixed left-0 right-0 bottom-0 z-depth-4 rounded_top_30 trans-0-1">
+            <div class="pagination_container container p-l-9 p-r-9 p-t-15 p-b-10 flex-sb-m pos-fixed left-0 right-0 bottom-0 z-depth-4 rounded_top_30">
                 <div class="pagination_item_counts flex-l p-l-10 flex-l-m">
-                    Showing
-
+                    مشاهده
                     <span class="m-l-5 m-r-5 max-w-50">
                         <input type="number" class="deep-purple-text text-accent-2 no-border center-align m-b-0" value="10">
                     </span>
-                    of
+                    از
                     <span class="deep-purple-text text-accent-2 m-l-5 m-r-5">100</span>
                 </div>
                 
                 <div class="pagination_buttons">
-                    <i class="material-icons deep-purple white-text accent-2 m-l-5 m-r-5 p-l-5 p-r-5 p-t-1 p-b-3 waves-effect waves-light rounded_pill">keyboard_arrow_left</i>
                     <i class="material-icons deep-purple accent-2 white-text m-l-5 m-r-5 p-l-5 p-r-5 p-t-1 p-b-3 waves-effect waves-light rounded_pill">keyboard_arrow_right</i>
+                    <i class="material-icons deep-purple white-text accent-2 m-l-5 m-r-5 p-l-5 p-r-5 p-t-1 p-b-3 waves-effect waves-light rounded_pill">keyboard_arrow_left</i>
                 </div>
                     
                 </div>
@@ -240,38 +218,44 @@
     
         <section>
             <div class="add_user_modal_back dis-none"></div>
-            <div class="add_user_modal container rounded_top_30 ">
+            <div class="add_user_modal container rounded_top_30 trans-0-3">
                 <div class="row p-t-10 p-b-10 p-r-60 p-l-40 center-on-small-only">
                     <h5>
                         <i class="material-icons m-r-10 m-l-10 pos-relative top-4">person_add</i>
-                        Add User
+                        اضافه کردن کاربر
                     </h5>
 
                     <form>
                         <div class="input-field col s12">
                             <input id="name" type="text" class="validate" />
-                            <label for="name">name: </label>
+                            <label for="name">نام: </label>
                         </div>
                         
                         <div class="input-field col s12">
                             <input id="username" type="text" class="validate" />
-                            <label for="username">username: </label>
+                            <label for="username">نام کاربری: </label>
                         </div>
                         
                         <div class="input-field col s12">
                             <input id="email" type="text" class="validate" />
-                            <label for="email">Email: </label>
+                            <label for="email">ایمیل: </label>
                             </div> 
                             
                             <button type="button" class="waves-effect waves-light btn deep-purple accent-2 m-t-20 m-b-10 w-full max-w-250 rounded_pill">
-                                SUMBIT
+                                ارسال<!-- SUMBIT -->
                             </button>
                     </form>
                 </div>
             </div>
         </section>
+
+        
+            
     <!------ Content sevtion -----end------>
     
+    <script src="/assets/js/axios.js"></script>
+    <script defer src="/assets/js/alpine.js"></script>
+    <script src="/assets/js/alpinejControllers/usersController.js"></script>
     <script src="/assets/materialize-v1.0.0/materialize/js/materialize.min.js"></script>
     <script src="/assets/js/app.js"></script>
     <script src="/assets/js/users.js"></script>
