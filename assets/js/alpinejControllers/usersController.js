@@ -14,6 +14,7 @@ document.addEventListener('alpine:init', () => {
             username:"",
             email:"",
         },
+        userIdToEdit: null,
         getUsers(){
             this.isloading = true 
             axios.get("https://jsonplaceholder.typicode.com/users").then((res)=>{
@@ -65,7 +66,7 @@ document.addEventListener('alpine:init', () => {
                     this.showAddModal = false
                     this.handleResetForm()
                     this.pagination()
-                    M.toast({html:'کاربر با موفقیت ایجاد شد!', classes: 'rounded green'});
+                    M.toast({html:'کاربر با موفقیت ایجاد شد!', classes: 'green'});
                 }
             }).finally(()=>{
                 this.isloading = false
@@ -77,6 +78,54 @@ document.addEventListener('alpine:init', () => {
                 username:"",
                 email:"",
             }
+        },
+        handleDeleteUser(user){
+            var toastHTML = `<span> مطمئنید که می خواهید (${user.name}) حذف شود؟</span><button class="btn-flat botton-Delete" x-on:click="handleConfrimDeleteUser(${user.id})">حذف</button>`
+            M.toast({html: toastHTML});
+        },
+        handleConfrimDeleteUser(userName){
+            
+            this.isloading = true
+            axios.delete("https://jsonplaceholder.typicode.com/users/"+userName,).then((res)=>{
+                if (res.status == 200){
+                    this.mainUsers = this.mainUsers.filter(user=>user.id != userName)
+                    this. users = this.users.filter(user=>user.id != userName)
+                    this.pagination()
+                    M.toast({html:'کاربر حذف شد!', classes: 'green'});
+
+                }
+            }).finally(()=>{
+                this.isloading = false
+            })
+        },
+        handleUpdateUser(user){
+            axios.get("https://jsonplaceholder.typicode.com/users/"+user.id).then(res=>{
+                if (res.status == 200) {
+                    this.newUserInfo = {
+                        name:res.data.name,
+                        username:res.data.username,
+                        email:res.data.email,
+                    }
+                    this.userIdToEdit = res.data.id
+                }
+            })
+            this.showAddModal = true
+        },
+        handleConfirmEditUser(){    
+            this.isloading = true
+            axios.put("https://jsonplaceholder.typicode.com/users/"+this.userIdToEdit , this.newUserInfo).then((res)=>{
+                if (res.status == 200){
+                    const userIndex = this.mainUsers.findIndex(user=>user.id = this.userIdToEdit)
+                    this.mainUsers[userIndex] = res.data
+                    this.showAddModal = false
+                    this.handleResetForm()
+                    this.userIdToEdit = null
+                    this.pagination()
+                    M.toast({html:'تغییرات با موفقیت اعمال شد!', classes: 'green'});
+                }
+            }).finally(()=>{
+                this.isloading = false
+            })  
         }
     }))
 })
